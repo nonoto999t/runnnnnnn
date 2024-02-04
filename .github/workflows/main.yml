@@ -2,7 +2,6 @@ name: Automate Web
 
 on:
   workflow_run:
-    workflows: ["Automate Web"]
     types:
       - completed
 
