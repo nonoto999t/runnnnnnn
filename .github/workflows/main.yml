@@ -1,11 +1,25 @@
-# docker-compose.yml
-version: '3'
-services:
-  web-container:
-    image: ubuntu:latest
-    command: tail -f /dev/null
-    volumes:
-      - ./script.py:/script.py
-      - ./list.txt:/list.txt
-    working_dir: /
-    entrypoint: ["python3", "/script.py"]
+# .github/workflows/main.yml
+name: Automate Web with Docker
+
+on:
+  workflow_run:
+    workflows: ["Automate Web with Docker"]
+    types:
+      - completed
+
+jobs:
+  automate_web:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Build Android Docker image
+      run: docker-compose -f android-docker-compose.yml build
+
+    - name: Build Web Docker image
+      run: docker build -t android-docker-image -f Dockerfile .
+
+    - name: Run Docker Compose
+      run: docker-compose -f docker-compose.yml up
