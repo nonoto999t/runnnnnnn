@@ -1,26 +1,11 @@
-name: Automate Web
-
-on:
-  workflow_run:
-    types:
-      - completed
-
-jobs:
-  automate_web:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Docker
-      uses: actions/setup-docker@v2
-
-    - name: Read URLs from list.txt
-      run: |
-        while IFS= read -r url; do
-          docker run -d -p 80:80 --name web-container -e URL="$url" your-docker-image
-          sleep 5
-          docker stop web-container
-          docker rm web-container
-        done < list.txt
+# docker-compose.yml
+version: '3'
+services:
+  web-container:
+    image: ubuntu:latest
+    command: tail -f /dev/null
+    volumes:
+      - ./script.py:/script.py
+      - ./list.txt:/list.txt
+    working_dir: /
+    entrypoint: ["python3", "/script.py"]
