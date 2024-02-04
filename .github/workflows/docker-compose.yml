@@ -1,0 +1,11 @@
+# docker-compose.yml
+version: '3'
+services:
+  web-container:
+    image: ubuntu:latest
+    command: tail -f /dev/null
+    volumes:
+      - ./script.py:/script.py
+      - ./list.txt:/list.txt
+    working_dir: /
+    entrypoint: ["python3", "/script.py"]
